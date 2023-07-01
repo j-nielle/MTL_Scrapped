@@ -18,6 +18,10 @@ class RegisteredUserController extends Controller
     /**
      * Display the registration view.
      */
+    public function index(){
+        return view('auth.unavailable');
+    }
+
     public function create(): View
     {
         return view('auth.register');
