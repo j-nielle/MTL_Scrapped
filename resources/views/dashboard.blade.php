@@ -1,22 +1,53 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-            {{ __('MoodTrail Dashboard') }}
-        </h2>
-    </x-slot>
+    <div class="p-4 text-gray-900 dark:text-gray-100">
+        <div class="flex flex-row">
+            <div class="w-full p-4 mb-4">
+                <div class="max-w-screen-md shadow-lg md:max-w-screen-sm">
+                    <table class="w-auto table-fixed sm:table-auto">
+                        <thead class="font-bold leading-6 tracking-widest text-left text-white bg-gray-800 border-b border-gray-200">
+                            <tr>
+                                <th class="p-4">
+                                    Student ID 
+                                </th>
+                                <th class="p-4">
+                                    Name
+                                </th>
+                                <th class="p-4 text-center">
+                                    Course
+                                </th>
+                                <th class="p-4 text-center">
+                                    Year Level
+                                </th>
+                            </tr>
+                        </thead>
 
-    <div class="p-5">
-        <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-            <div class="overflow-hidden bg-white shadow-sm dark:bg-gray-800 sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    @foreach($contact as $item)
-                        <p>{{ $item->contactNum }}</p>
-                    @endforeach
-
-                    <!-- Example of accessing the $requestType variable in the view -->
-                    @foreach($requestType as $item)
-                        <p>{{ $item->requestType }}</p>
-                    @endforeach
+                        <tbody class="bg-white">
+                            @foreach($student as $student)
+                            <tr class="text-gray-900 border-b border-gray-300">
+                                <td class="px-4 py-2">
+                                    <div>
+                                    {{ $student->studentID }}
+                                    </div>
+                                </td>
+                                <td class="px-4 py-2">
+                                    <div class="">
+                                        {{ $student->studentName }}
+                                    </div>
+                                </td>
+                                <td class="px-4 py-2">
+                                    <div class="">
+                                        {{ $student->studentCourse }}
+                                    </div>
+                                </td>
+                                <td class="px-4 py-2">
+                                    <div class="">
+                                        {{ $student->studentYrLvl }}
+                                    </div>
+                                </td>     
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

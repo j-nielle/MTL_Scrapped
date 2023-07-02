@@ -27,10 +27,19 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
+Route::get('/notifications', function(){
     $contact = Contact::all();
     $requestType = RequestType::all();
     $requests = Requests::all();
+
+    return view('notifications', [
+        'contact' => $contact,
+        'requestType' => $requestType,
+        'requests' => $requests
+    ]);
+})->middleware(['auth', 'verified'])->name('notifications');
+
+Route::get('/dashboard', function () {
     $mood = Mood::all();
     $reason = Reason::all();
     $student = Student::all();
@@ -39,10 +48,7 @@ Route::get('/dashboard', function () {
 
     //dd($contact, $requestType, $requests, $mood, $reason, $student, $studentMood, $anonMood);
 
-    return view('dashboard', [
-        'contact' => $contact,
-        'requestType' => $requestType,
-        'requests' => $requests,
+    return view('dashboard',[
         'mood' => $mood,
         'reason' => $reason,
         'student' => $student,
