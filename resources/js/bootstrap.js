@@ -31,8 +31,8 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     enabledTransports: ['ws', 'wss'],
 // });
 
-import Echo from 'laravel-echo';
+/* import Echo from 'laravel-echo';
 
 import { WaveConnector } from 'laravel-wave';
 
-window.Echo = new Echo({ broadcaster: WaveConnector });
+window.Echo = new Echo({ broadcaster: WaveConnector }); */
