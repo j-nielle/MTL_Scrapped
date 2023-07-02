@@ -21,9 +21,9 @@ class SSEController extends Controller
         return new StreamedResponse(function () {
             header('Content-Type: text/event-stream');
             while (true) {
-                $requests = Requests::join('contact', 'contact.contactID', '=', 'request.contactID')
+                $requests = Requests::select('contact.contactNum', 'request_type.requestType')
                                     ->join('request_type', 'request_type.requestTypeID', '=', 'request.requestTypeID')
-                                    ->select('contact.contactNum', 'request_type.requestType')
+                                    ->join('contact', 'contact.contactID', '=', 'request.contactID')
                                     ->orderBy('requestID','desc')->get();
                 $responseData = json_encode($requests); // Encode the data in JSON format
                 
