@@ -56,6 +56,6 @@ document.addEventListener('DOMContentLoaded', function () {
     
             table.insertAdjacentHTML('afterbegin', tableHtml); // Prepend the table header
     
-        }, 100); // Set a delay of 100 milliseconds before rendering the updated data
+        }, 1000); // Set a delay of 100 milliseconds before rendering the updated data
     };    
 });
