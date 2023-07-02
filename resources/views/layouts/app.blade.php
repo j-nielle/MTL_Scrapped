@@ -13,6 +13,7 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/regular.min.css">
         {{-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
     </head>
     <body class="font-sans antialiased">
