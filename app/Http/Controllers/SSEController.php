@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use App\Jobs\FetchDataJob;
 
 use App\Models\Student;
 use App\Models\Mood;
@@ -21,13 +22,9 @@ class SSEController extends Controller
         return new StreamedResponse(function () {
             header('Content-Type: text/event-stream');
             while (true) {
-                $requests = Requests::select('contact.contactNum', 'request_type.requestType')
-                                    ->join('request_type', 'request_type.requestTypeID', '=', 'request.requestTypeID')
-                                    ->join('contact', 'contact.contactID', '=', 'request.contactID')
-                                    ->orderBy('requestID','desc')->get();
-                $responseData = json_encode($requests); // Encode the data in JSON format
+                // Dispatch the job to the queue
+                FetchDataJob::dispatch()->onQueue('data-fetching');
                 
-                echo "data: $responseData\n\n";
                 ob_flush(); // Flush the output buffer
                 flush(); // Flush the output buffer and turn off output buffering
                 
