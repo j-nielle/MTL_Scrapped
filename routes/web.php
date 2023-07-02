@@ -1,13 +1,12 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\NotifController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\SSEController;
 use App\Models\Student;
 use App\Models\Mood;
-use App\Models\Contact;
-use App\Models\RequestType;
-use App\Models\Requests;
 use App\Models\StudentMood;
 use App\Models\AnonMood;
 use App\Models\Reason;
@@ -27,35 +26,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/notifications', function(){
-    $contact = Contact::all();
-    $requestType = RequestType::all();
-    $requests = Requests::all();
+Route::get('/sse-request', [SSEController::class, 'fetchData'])->middleware(['auth']);
 
-    return view('notifications', [
-        'contact' => $contact,
-        'requestType' => $requestType,
-        'requests' => $requests
-    ]);
-})->middleware(['auth', 'verified'])->name('notifications');
+Route::get('/notifications', [NotifController::class,'index'])->middleware(['auth', 'verified'])->name('notifications');
 
-Route::get('/dashboard', function () {
-    $mood = Mood::all();
-    $reason = Reason::all();
-    $student = Student::all();
-    $studentMood = StudentMood::all();
-    $anonMood = AnonMood::all();
-
-    //dd($contact, $requestType, $requests, $mood, $reason, $student, $studentMood, $anonMood);
-
-    return view('dashboard',[
-        'mood' => $mood,
-        'reason' => $reason,
-        'student' => $student,
-        'studentMood' => $studentMood,
-        'anonMood' => $anonMood
-    ]);
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class,'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
