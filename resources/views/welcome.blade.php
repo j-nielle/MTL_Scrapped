@@ -20,16 +20,16 @@
                     </svg>
                 </div>
 
-                <div class="mt-6">
+                <div class="mt-6 flex justify-center">
                     <a href="/login">
                         @if (Route::has('login'))
                             @auth
-                            <a href="{{ url('/dashboard') }}" class="font-normal hover:underline text-white hover:text-yellow-400">Back to Dashboard</a>
+                            <a href="{{ url('/dashboard') }}" class="font-semibold text-gray-900 outline outline-1 p-2 outline-red-600 dark:text-white hover:text-white hover:bg-red-600">Back to Dashboard</a>
                             @else
-                                <a href="{{ route('login') }}" class="font-normal hover:underline text-white hover:text-yellow-400">LOGIN</a>
+                                <a href="{{ route('login') }}" class="font-semibold text-gray-900 outline outline-1 p-2 outline-red-600 hover:font-bold dark:text-white hover:text-white hover:bg-red-600">LOGIN</a>
 
                                 @if (Route::has('register'))
-                                    <a href="{{ route('register') }}" class="ml-4 font-normal hover:underline text-white hover:text-yellow-400">REGISTER</a>
+                                    <a href="{{ route('register') }}" class="ml-3 font-semibold text-gray-900 outline outline-1 p-2 outline-red-600 dark:text-white hover:text-white hover:bg-red-600">REGISTER</a>
                                 @endif
                             @endauth
                         @endif
