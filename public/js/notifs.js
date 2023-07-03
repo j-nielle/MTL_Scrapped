@@ -17,7 +17,7 @@ function handleSSEUpdates() {
             return;
         } else {
             previousCreatedAt = latestCreatedAt;
-            console.log("new");
+            console.log("new event");
         }
 
         clearTimeout(renderTimeout);
@@ -26,7 +26,12 @@ function handleSSEUpdates() {
         }, 100);
     }
 
+    // Modify the function signature to accept the filteredData parameter
+    // function renderData(eventData, filteredData) {
     function renderData(eventData) {
+        // ...
+        // Use the filteredData to generate HTML rows and update the table
+        // ...
         const maxRows = eventData.length;
         toggleStates = new Array(maxRows).fill(true);
 
@@ -44,14 +49,21 @@ function handleSSEUpdates() {
     }
 
     function createRowHtml(item, index) {
-        const createdDate = new Date(item.created_at);
-        const formattedDate = createdDate.toLocaleString("en-US", {
-            month: "2-digit",
-            day: "2-digit",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-        });
+        const date = new Date(item.created_at);
+        const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1)
+            .toString()
+            .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")} ${date
+                .toLocaleString("en-US", {
+                    hour: "numeric",
+                    minute: "2-digit",
+                    hour12: true,
+                })
+                .toUpperCase()}`;
+
+        // can be used to filter data through comparison or match
+        const extractedDate = `${date.getFullYear()}-${(date.getMonth() + 1)
+            .toString()
+            .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;;
 
         const opacity = toggleStates[index] ? "1" : "0.5";
         const phoneIconClass = toggleStates[index] ? "fa-phone" : "fa-phone-slash";
@@ -69,18 +81,25 @@ function handleSSEUpdates() {
     function handleToggleRowClick(rowIndex) {
         toggleStates[rowIndex] = !toggleStates[rowIndex];
 
-        const rows = tbody.getElementsByTagName("tr");
-        const rowElements = Array.from(rows);
-        const tds = rowElements[rowIndex].getElementsByTagName("td");
+        const row = tbody.querySelector(`tr:nth-child(${rowIndex + 1})`);
+        const tds = row.getElementsByTagName("td");
 
-        tds[0].style.opacity = toggleStates[rowIndex] ? "1" : "0.5";
-        tds[1].style.opacity = toggleStates[rowIndex] ? "1" : "0.5";
-        tds[2].style.opacity = toggleStates[rowIndex] ? "1" : "0.5";
-        tds[3].style.opacity = toggleStates[rowIndex] ? "1" : "0.5";
+        const opacityValue = toggleStates[rowIndex] ? "1" : "0.5";
+        for (const td of tds) {
+            td.style.opacity = opacityValue;
+        }
 
-        const phoneIcon = rowElements[rowIndex].querySelector(".phone-icon");
-        phoneIcon.classList.remove(toggleStates[rowIndex] ? "fa-phone-slash" : "fa-phone");
-        phoneIcon.classList.add(toggleStates[rowIndex] ? "fa-phone" : "fa-phone-slash");
+        const phoneIcon = row.querySelector(".phone-icon");
+        phoneIcon.classList.toggle("fa-phone", toggleStates[rowIndex]);
+        phoneIcon.classList.toggle("fa-phone-slash", !toggleStates[rowIndex]);
+    }
+
+    function handleDateFilter() {
+        const selectedDate = document.getElementById("notifs-datepicker").value;
+
+        // Use the selectedDate to filter the SSE event data
+        // and update the table accordingly.
+        // Implement your filtering logic here (Compare date values).
     }
 
     const eventSource = new EventSource("/sse-request");

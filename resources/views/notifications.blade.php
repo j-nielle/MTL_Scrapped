@@ -2,9 +2,9 @@
     <script src="{{ asset('js/notifs.js') }}"></script>
 
     <div class="w-full p-8" id="notifs-container">
-        <input type="date" id="notifs-datepicker" class="mb-2">
-        <div class="max-h-96 overflow-auto w-fit">
-            <table class="table-fixed sm:table-auto shadow-lg bg-white" id="notifs-table">                
+        <input type="date" id="notifs-datepicker" class="mb-2" onchange="handleDateFilter()">
+        <div class="overflow-auto max-h-96 w-fit drop-shadow-xl">
+            <table class="bg-white table-fixed sm:table-auto" id="notifs-table">                
                 <thead class="sticky top-0 font-bold leading-6 tracking-widest text-left text-white bg-gray-800 border-b border-gray-200">
                     <tr>
                         <th class="p-4">Contact Number</th>
