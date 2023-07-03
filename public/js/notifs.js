@@ -17,7 +17,7 @@ function handleSSEUpdates() {
             return;
         } else {
             previousCreatedAt = latestCreatedAt;
-            console.log("new event");
+            console.log("new");
         }
 
         clearTimeout(renderTimeout);
@@ -26,12 +26,7 @@ function handleSSEUpdates() {
         }, 100);
     }
 
-    // Modify the function signature to accept the filteredData parameter
-    // function renderData(eventData, filteredData) {
     function renderData(eventData) {
-        // ...
-        // Use the filteredData to generate HTML rows and update the table
-        // ...
         const maxRows = eventData.length;
         toggleStates = new Array(maxRows).fill(true);
 
@@ -59,11 +54,10 @@ function handleSSEUpdates() {
                     hour12: true,
                 })
                 .toUpperCase()}`;
-
-        // can be used to filter data through comparison or match
+        
         const extractedDate = `${date.getFullYear()}-${(date.getMonth() + 1)
             .toString()
-            .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;;
+            .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
 
         const opacity = toggleStates[index] ? "1" : "0.5";
         const phoneIconClass = toggleStates[index] ? "fa-phone" : "fa-phone-slash";
@@ -92,14 +86,6 @@ function handleSSEUpdates() {
         const phoneIcon = row.querySelector(".phone-icon");
         phoneIcon.classList.toggle("fa-phone", toggleStates[rowIndex]);
         phoneIcon.classList.toggle("fa-phone-slash", !toggleStates[rowIndex]);
-    }
-
-    function handleDateFilter() {
-        const selectedDate = document.getElementById("notifs-datepicker").value;
-
-        // Use the selectedDate to filter the SSE event data
-        // and update the table accordingly.
-        // Implement your filtering logic here (Compare date values).
     }
 
     const eventSource = new EventSource("/sse-request");
