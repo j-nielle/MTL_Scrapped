@@ -18,7 +18,7 @@ class SSEController extends Controller
 
     public function fetchData()
     {
-        $this->notifs = DB::table('requestNotifs')->orderBy('created_at')->get();
+        $this->notifs = DB::table('requestNotifs')->orderBy('created_at','desc')->get();
         $this->overall = DB::table('allMoods')->get();
 
         return new StreamedResponse(function () {

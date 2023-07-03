@@ -2,15 +2,27 @@ document.addEventListener('DOMContentLoaded', function () {
     const tbody = document.getElementById("notifs-tbody");
     const eventSource = new EventSource("/sse-request");
     let renderTimeout;
-    const maxRows = 10;
+
+    let previousCreatedAt; // Variable to store the previous eventData.created_at value
 
     eventSource.onmessage = function (event) {
         const eventData = JSON.parse(event.data);
+        const maxRows = eventData.length;
 
         if (eventData.length === 0) {
             return; // Skip the update if eventData is empty
         }
-        console.log(eventData);
+
+        const latestCreatedAt = eventData[0].created_at;
+
+        if (latestCreatedAt === previousCreatedAt) {
+            console.log('same timestamp');
+            return; // Skip the update if the latest created_at is the same as the previous one
+        }else {
+            previousCreatedAt = latestCreatedAt;
+            console.log('new timestamp');
+        }
+
         clearTimeout(renderTimeout); // Clear previous timeout to limit rendering frequency
 
         renderTimeout = setTimeout(() => {
@@ -25,14 +37,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 .join('');
 
             tbody.innerHTML = rowsHtml;
-        }, 1000); // Set a delay of 1000 milliseconds before rendering the updated data
+        }, 100); // Set a delay of 1000 milliseconds before rendering the updated data
     };
-
-    function getCurrentDateTime() {
-        const currentDate = new Date();
-        const timezoneOffset = 8 * 60; // GMT+08:00 in minutes
-        currentDate.setMinutes(currentDate.getMinutes() + timezoneOffset);
-        const formattedDateTime = currentDate.toISOString().replace('T', ' ').slice(0, 19);
-        return formattedDateTime;
-    }
 });
