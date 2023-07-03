@@ -6,7 +6,7 @@ function handleSSEUpdates() {
 
     function renderData(eventData) {
         const maxRows = eventData.length;
-        toggleStates = new Array(maxRows).fill(true); // Initialize toggleStates array with true values
+        toggleStates = new Array(maxRows).fill(true);
 
         const rowsHtml = eventData
             .slice(0, maxRows)
@@ -24,7 +24,6 @@ function handleSSEUpdates() {
 
         tbody.innerHTML = rowsHtml;
 
-        // Add click event listener to the eye icons
         const eyeIcons = document.querySelectorAll(".eye-icon");
         eyeIcons.forEach((icon, index) => {
             icon.addEventListener("click", () => handleEyeIconClick(index));
@@ -32,21 +31,16 @@ function handleSSEUpdates() {
     }
 
     function handleEyeIconClick(rowIndex) {
-        toggleStates[rowIndex] = !toggleStates[rowIndex]; // Toggle the state
-    
-        // Get the row elements
+        toggleStates[rowIndex] = !toggleStates[rowIndex];
+
         const rows = tbody.getElementsByTagName("tr");
         const rowElements = Array.from(rows);
-    
-        // Get the corresponding td elements for the clicked row
         const tds = rowElements[rowIndex].getElementsByTagName("td");
     
-        // Change opacity of td elements based on the toggle state
         tds[0].style.opacity = toggleStates[rowIndex] ? "1" : "0.5";
         tds[1].style.opacity = toggleStates[rowIndex] ? "1" : "0.5";
         tds[2].style.opacity = toggleStates[rowIndex] ? "1" : "0.5";
     
-        // Change the eye icon based on the toggle state
         const eyeIcon = rowElements[rowIndex].querySelector(".eye-icon");
         eyeIcon.classList.remove(toggleStates[rowIndex] ? "fa-eye-slash" : "fa-eye");
         eyeIcon.classList.add(toggleStates[rowIndex] ? "fa-eye" : "fa-eye-slash");
