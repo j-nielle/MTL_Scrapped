@@ -1,43 +1,38 @@
-// Load the data from the server using Server-Sent Events
 document.addEventListener('DOMContentLoaded', function () {
-    const eventSource = new EventSource('/sse-request');
-    const container = document.getElementById('notifs-container');
-    const body = document.getElementById('notifs-tbody');
-    const maxRows = 10; // Set the maximum number of rows to display
-
+    const tbody = document.getElementById("notifs-tbody");
+    const eventSource = new EventSource("/sse-request");
     let renderTimeout;
+    const maxRows = 10;
 
     eventSource.onmessage = function (event) {
-        const responseData = JSON.parse(event.data);
-        console.log(responseData);
+        const eventData = JSON.parse(event.data);
 
-        if (responseData.length === 0) {
-            return; // Skip the update if responseData is empty
+        if (eventData.length === 0) {
+            return; // Skip the update if eventData is empty
         }
-
-        if (renderTimeout) {
-            clearTimeout(renderTimeout); // Clear previous timeout to limit rendering frequency
-        }
+        console.log(eventData);
+        clearTimeout(renderTimeout); // Clear previous timeout to limit rendering frequency
 
         renderTimeout = setTimeout(() => {
-            const rowsHtml = responseData
+            const rowsHtml = eventData
                 .slice(0, maxRows) // Limit the number of rows to maxRows
                 .map((item) => `
-                    <tr class="text-gray-900 border-b border-gray-300">
-                        <td class="px-4 py-2">${item.contactNum}</td>
-                        <td class="px-4 py-2">${item.requestType}</td>
-                    </tr>
-                `)
+        <tr class="text-gray-900 border-b border-gray-300">
+          <td class="px-4 py-2">${item.Phone}</td>
+          <td class="px-4 py-2">${item.RequestType}</td>
+        </tr>
+      `)
                 .join('');
 
-            body.innerHTML = rowsHtml;
-
-            // Add a scrollbar if the number of rows exceeds the maximum limit
-            if (responseData.length > maxRows) {
-                container.style.overflowY = "scroll";
-            } else {
-                container.style.overflowY = "auto";
-            }
+            tbody.innerHTML = rowsHtml;
         }, 1000); // Set a delay of 1000 milliseconds before rendering the updated data
     };
+
+    function getCurrentDateTime() {
+        const currentDate = new Date();
+        const timezoneOffset = 8 * 60; // GMT+08:00 in minutes
+        currentDate.setMinutes(currentDate.getMinutes() + timezoneOffset);
+        const formattedDateTime = currentDate.toISOString().replace('T', ' ').slice(0, 19);
+        return formattedDateTime;
+    }
 });

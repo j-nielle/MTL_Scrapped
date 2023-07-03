@@ -3,30 +3,29 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\RequestNotifs;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-
-use App\Models\Student;
-use App\Models\Mood;
-use App\Models\Contact;
-use App\Models\RequestType;
-use App\Models\Requests;
-use App\Models\StudentMood;
-use App\Models\AnonMood;
-use App\Models\Reason;
 
 class SSEController extends Controller
 {
+    public function __construct()
+    {
+        // Initialize the properties with null values
+        $this->notifs = null;
+        $this->overall = null;
+    }
+
     public function fetchData()
     {
+        $this->notifs = DB::table('requestNotifs')->orderBy('created_at')->get();
+        $this->overall = DB::table('allMoods')->get();
+
         return new StreamedResponse(function () {
             header('Content-Type: text/event-stream');
             while (true) {
-                $requests = Requests::select('contact.contactNum', 'request_type.requestType', 'request.created_at')
-                                    ->join('request_type', 'request_type.requestTypeID', '=', 'request.requestTypeID')
-                                    ->join('contact', 'contact.contactID', '=', 'request.contactID')
-                                    ->orderBy('requestID','desc')->get();
+                $requests = $this->notifs; // Use $this->notifs instead of undefined $notifs
                 $responseData = json_encode($requests); // Encode the data in JSON format
-
                 echo "data: $responseData\n\n";
                 ob_flush(); // Flush the output buffer
                 flush(); // Flush the output buffer and turn off output buffering
