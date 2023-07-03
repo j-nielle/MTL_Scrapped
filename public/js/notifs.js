@@ -1,11 +1,31 @@
+function handleDateFilter(renderTimeout, eventData, renderData) {
+    const datePicker = document.getElementById("notifs-datepicker");
+    clearTimeout(renderTimeout); // Clear the previous timeout if it exists
+
+    renderTimeout = setTimeout(() => {
+        const selectedDate = new Date(datePicker.value);
+
+        const filteredData = eventData ? eventData.filter((item) => {
+            const itemDate = new Date(item.created_at);
+            return itemDate.toDateString() === selectedDate.toDateString();
+        }) : [];
+
+        renderData(filteredData);
+    }, 100);
+}
+
 function handleSSEUpdates() {
+    const eventSource = new EventSource("/sse-request");
     const tbody = document.getElementById("notifs-tbody");
+    const datePicker = document.getElementById("notifs-datepicker");
+
     let toggleStates = [];
-    let previousCreatedAt;
-    let renderTimeout;
+    let previousCreatedAt = null;
+    let renderTimeout = null;
+    let eventData = [];
 
     function handleSSEMessage(event) {
-        const eventData = JSON.parse(event.data);
+        eventData = JSON.parse(event.data); // Update the eventData
 
         if (eventData.length === 0) {
             return;
@@ -30,15 +50,23 @@ function handleSSEUpdates() {
         const maxRows = eventData.length;
         toggleStates = new Array(maxRows).fill(true);
 
-        const rowsHtml = eventData
-            .slice(0, maxRows)
-            .map((item, index) => createRowHtml(item, index))
-            .join("");
+        const rowsHtml = maxRows > 0
+            ? eventData
+                .slice(0, maxRows)
+                .map((item, index) => createRowHtml(item, index))
+                .join("")
+            : `<tr class="text-gray-900 border-b border-gray-300">
+            <td class="px-4 py-2">Empty</td>
+            <td class="px-4 py-2">Empty</td>
+            <td class="px-4 py-2">Empty</td>
+            <td class="px-4 py-2">Empty</td>
+            </tr>`;
 
         tbody.innerHTML = rowsHtml;
 
         const toggleRows = document.querySelectorAll(".toggle-row");
         toggleRows.forEach((row, index) => {
+            row.removeEventListener("click", handleToggleRowClick); // Remove the previous event listener
             row.addEventListener("click", () => handleToggleRowClick(index));
         });
     }
@@ -54,22 +82,18 @@ function handleSSEUpdates() {
                     hour12: true,
                 })
                 .toUpperCase()}`;
-        
-        const extractedDate = `${date.getFullYear()}-${(date.getMonth() + 1)
-            .toString()
-            .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
 
         const opacity = toggleStates[index] ? "1" : "0.5";
         const phoneIconClass = toggleStates[index] ? "fa-phone" : "fa-phone-slash";
 
         return `<tr class="text-gray-900 border-b border-gray-300">
-        <td class="px-4 py-2" style="opacity: ${opacity}">${item.Phone}</td>
-        <td class="px-4 py-2" style="opacity: ${opacity}">${item.RequestType}</td>
-        <td class="px-4 py-2" style="opacity: ${opacity}">${formattedDate}</td>
-        <td class="px-4 py-2 text-center toggle-row" style="cursor:pointer;">
-          <i class="phone-icon fa-solid ${phoneIconClass}"></i>
-        </td>
-      </tr>`;
+            <td class="px-4 py-2" style="opacity: ${opacity}">${item.Phone}</td>
+            <td class="px-4 py-2" style="opacity: ${opacity}">${item.RequestType}</td>
+            <td class="px-4 py-2" style="opacity: ${opacity}">${formattedDate}</td>
+            <td class="px-4 py-2 text-center toggle-row" style="cursor:pointer;">
+                <i class="phone-icon fa-solid ${phoneIconClass}"></i>
+            </td>
+        </tr>`;
     }
 
     function handleToggleRowClick(rowIndex) {
@@ -88,8 +112,11 @@ function handleSSEUpdates() {
         phoneIcon.classList.toggle("fa-phone-slash", !toggleStates[rowIndex]);
     }
 
-    const eventSource = new EventSource("/sse-request");
+    let handleDateFilterListener = () => handleDateFilter(renderTimeout, eventData, renderData);
     eventSource.onmessage = handleSSEMessage;
+
+    datePicker.removeEventListener("change", handleDateFilterListener);
+    datePicker.addEventListener("change", handleDateFilterListener);
 }
 
 document.addEventListener("DOMContentLoaded", handleSSEUpdates);
