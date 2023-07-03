@@ -16,7 +16,7 @@ function handleSSEUpdates() {
                     <td class="px-4 py-2" style="opacity: ${toggleStates[index] ? '1' : '0.5'}">${item.RequestType}</td>
                     <td class="px-4 py-2" style="opacity: ${toggleStates[index] ? '1' : '0.5'}">${item.created_at}</td>
                     <td class="px-4 py-2 text-center">
-                        <i class="eye-icon fa-solid ${toggleStates[index] ? 'fa-eye' : 'fa-eye-slash'}"></i>
+                        <i class="phone-icon fa-solid ${toggleStates[index] ? 'fa-phone' : 'fa-phone-slash'}"></i>
                     </td>
                 </tr>
             `)
@@ -24,13 +24,13 @@ function handleSSEUpdates() {
 
         tbody.innerHTML = rowsHtml;
 
-        const eyeIcons = document.querySelectorAll(".eye-icon");
-        eyeIcons.forEach((icon, index) => {
-            icon.addEventListener("click", () => handleEyeIconClick(index));
+        const phoneIcons = document.querySelectorAll(".phone-icon");
+        phoneIcons.forEach((icon, index) => {
+            icon.addEventListener("click", () => handlePhoneIconClick(index));
         });
     }
 
-    function handleEyeIconClick(rowIndex) {
+    function handlePhoneIconClick(rowIndex) {
         toggleStates[rowIndex] = !toggleStates[rowIndex];
 
         const rows = tbody.getElementsByTagName("tr");
@@ -41,9 +41,9 @@ function handleSSEUpdates() {
         tds[1].style.opacity = toggleStates[rowIndex] ? "1" : "0.5";
         tds[2].style.opacity = toggleStates[rowIndex] ? "1" : "0.5";
     
-        const eyeIcon = rowElements[rowIndex].querySelector(".eye-icon");
-        eyeIcon.classList.remove(toggleStates[rowIndex] ? "fa-eye-slash" : "fa-eye");
-        eyeIcon.classList.add(toggleStates[rowIndex] ? "fa-eye" : "fa-eye-slash");
+        const phoneIcon = rowElements[rowIndex].querySelector(".phone-icon");
+        phoneIcon.classList.remove(toggleStates[rowIndex] ? "fa-phone-slash" : "fa-phone");
+        phoneIcon.classList.add(toggleStates[rowIndex] ? "fa-phone" : "fa-phone-slash");
     }    
 
     function handleSSEMessage(event) {
