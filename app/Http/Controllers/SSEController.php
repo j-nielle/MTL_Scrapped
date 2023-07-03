@@ -9,29 +9,55 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class SSEController extends Controller
 {
-    public function __construct()
-    {
-        // Initialize the properties with null values
-        $this->notifs = null;
-        $this->overall = null;
-    }
+    private $notifs;
+    private $overall;
 
+    /**
+     * @return StreamedResponse
+     */
     public function fetchData()
     {
-        $this->notifs = DB::table('requestNotifs')->orderBy('created_at','desc')->get();
-        $this->overall = DB::table('allMoods')->get();
+        $this->fetchDataFromDatabase();
 
         return new StreamedResponse(function () {
-            header('Content-Type: text/event-stream');
+            $this->setSSEHeaders();
+
             while (true) {
-                $requests = $this->notifs; // Use $this->notifs instead of undefined $notifs
-                $responseData = json_encode($requests); // Encode the data in JSON format
+                $responseData = json_encode($this->notifs);
+
                 echo "data: $responseData\n\n";
-                ob_flush(); // Flush the output buffer
-                flush(); // Flush the output buffer and turn off output buffering
-                
-                sleep(1); // Sleep for 1 second before sending the next event
+                $this->flushOutputBuffer();
+
+                sleep(1);
             }
         });
+    }
+
+    /**
+     * Fetch data from the database.
+     */
+    private function fetchDataFromDatabase()
+    {
+        $this->notifs = DB::table('requestNotifs')->orderBy('created_at', 'desc')->get();
+        $this->overall = DB::table('allMoods')->get();
+    }
+
+    /**
+     * Set headers for Server-Sent Events (SSE).
+     */
+    private function setSSEHeaders()
+    {
+        header('Content-Type: text/event-stream');
+        header('Cache-Control: no-cache');
+        header('Connection: keep-alive');
+    }
+
+    /**
+     * Flush the output buffer.
+     */
+    private function flushOutputBuffer()
+    {
+        ob_flush();
+        flush();
     }
 }
