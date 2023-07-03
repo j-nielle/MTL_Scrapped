@@ -1,7 +1,8 @@
 <x-app-layout>
     <script src="{{ asset('js/notifs.js') }}"></script>
 
-    <div class="w-full p-8 mb-4" id="notifs-container">
+    <div class="w-full p-8" id="notifs-container">
+        <input type="date" id="notifs-datepicker" class="mb-2">
         <div class="max-h-96 overflow-auto w-fit">
             <table class="table-fixed sm:table-auto shadow-lg bg-white" id="notifs-table">
                 <thead class="sticky top-0 font-bold leading-6 tracking-widest text-left text-white bg-gray-800 border-b border-gray-200">
