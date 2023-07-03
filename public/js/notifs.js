@@ -15,7 +15,7 @@ function handleSSEUpdates() {
                 <td class="px-4 py-2" style="opacity: ${toggleStates[index] ? '1' : '0.5'}">${item.Phone}</td>
                 <td class="px-4 py-2" style="opacity: ${toggleStates[index] ? '1' : '0.5'}">${item.RequestType}</td>
                 <td class="px-4 py-2" style="opacity: ${toggleStates[index] ? '1' : '0.5'}">${item.created_at}</td>
-                <td class="px-4 py-2 text-center toggle-row"> <!-- Updated class here -->
+                <td class="px-4 py-2 text-center toggle-row" style="cursor:pointer;">
                     <i class="phone-icon fa-solid ${toggleStates[index] ? 'fa-phone' : 'fa-phone-slash'}"></i>
                 </td>
             </tr>
@@ -24,12 +24,11 @@ function handleSSEUpdates() {
 
         tbody.innerHTML = rowsHtml;
 
-        const toggleRows = document.querySelectorAll(".toggle-row"); // Select the toggle rows
+        const toggleRows = document.querySelectorAll(".toggle-row");
         toggleRows.forEach((row, index) => {
-            row.addEventListener("click", () => handleToggleRowClick(index)); // Add click event listener
+            row.addEventListener("click", () => handleToggleRowClick(index));
         });
     }
-
 
     function handleToggleRowClick(rowIndex) {
         toggleStates[rowIndex] = !toggleStates[rowIndex];
@@ -76,8 +75,6 @@ function handleSSEUpdates() {
             renderData(eventData);
         }, 100);
     }
-
-
 
     const eventSource = new EventSource("/sse-request");
     eventSource.onmessage = handleSSEMessage;
