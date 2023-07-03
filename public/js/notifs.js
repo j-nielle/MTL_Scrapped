@@ -40,6 +40,7 @@ function handleSSEUpdates() {
         tds[0].style.opacity = toggleStates[rowIndex] ? "1" : "0.5";
         tds[1].style.opacity = toggleStates[rowIndex] ? "1" : "0.5";
         tds[2].style.opacity = toggleStates[rowIndex] ? "1" : "0.5";
+        tds[3].style.opacity = toggleStates[rowIndex] ? "1" : "0.5";
     
         const phoneIcon = rowElements[rowIndex].querySelector(".phone-icon");
         phoneIcon.classList.remove(toggleStates[rowIndex] ? "fa-phone-slash" : "fa-phone");
@@ -53,7 +54,13 @@ function handleSSEUpdates() {
             return;
         }
 
-        const latestCreatedAt = eventData[0].created_at;
+        const latestCreatedAt = eventData[0].created_at; 
+        const date = new Date(latestCreatedAt);
+        const formattedDate = date.toLocaleString('en-US', {
+            month: '2-digit',
+            day: '2-digit',
+            year: 'numeric'
+        });
 
         if (latestCreatedAt === previousCreatedAt) {
             console.log('same timestamp');
@@ -68,6 +75,8 @@ function handleSSEUpdates() {
             renderData(eventData);
         }, 100);
     }
+
+    
 
     const eventSource = new EventSource("/sse-request");
     eventSource.onmessage = handleSSEMessage;
