@@ -1,15 +1,10 @@
 <?php
 
 use App\Http\Controllers\NotifController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\SSEController;
-use App\Models\Student;
-use App\Models\Mood;
-use App\Models\StudentMood;
-use App\Models\AnonMood;
-use App\Models\Reason;
 
 /*
 |--------------------------------------------------------------------------
