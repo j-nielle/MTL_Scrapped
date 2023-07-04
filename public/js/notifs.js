@@ -1,6 +1,6 @@
 function handleDateFilter(renderTimeout, eventData, renderData) {
     const datePicker = document.getElementById("notifs-datepicker");
-    clearTimeout(renderTimeout); // Clear the previous timeout if it exists
+    clearTimeout(renderTimeout);
 
     renderTimeout = setTimeout(() => {
         const selectedDate = new Date(datePicker.value);
