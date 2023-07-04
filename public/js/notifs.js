@@ -7,8 +7,11 @@ function handleDateFilter(renderTimeout, eventData, renderData) {
 
         const filteredData = eventData ? eventData.filter((item) => {
             const eventDate = new Date(item.created_at);
+            if (selectedDate.toDateString() === 'Invalid Date') {
+                return true; // Return true to include all rows when selectedDate is Invalid Date
+            }
             return eventDate.toDateString() === selectedDate.toDateString();
-        }) : [];
+        }) : [];        
 
         window.renderData(filteredData);
     }, 100);
