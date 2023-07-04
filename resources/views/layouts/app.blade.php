@@ -33,13 +33,14 @@
 
         <!-- Page Content -->
         <main>
-            <script src="{{ asset('js/alerts.js') }}"></script>
+            <script src="{{ asset('js/requests.js') }}"></script>
             <div class="hidden" id="help-request-alert">
-                <div class="rounded-full p-2 m-4 bg-indigo-800 items-center text-indigo-100 leading-none fixed right-0 top-0 flex">
+                <div
+                    class="rounded-full p-2 m-4 bg-indigo-800 items-center text-indigo-100 leading-none fixed right-0 top-0 flex">
                     <span class="flex rounded-full bg-indigo-500 uppercase px-2 py-1 text-xs font-bold mr-2">New</span>
                     <span class="font-semibold text-left mr-1 flex-auto">Help request received!</span>
                     @if (!Route::is('notifications'))
-                        <a href="{{ route('notifications') }}" class="ml-2" onclick="removeReqAlert()">
+                        <a href="{{ route('notifications') }}" class="ml-2">
                             <svg class="fill-current opacity-75 h-4 w-4" xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 20 20">
                                 <path
