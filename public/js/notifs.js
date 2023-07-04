@@ -6,8 +6,8 @@ function handleDateFilter(renderTimeout, eventData, renderData) {
         const selectedDate = new Date(datePicker.value);
 
         const filteredData = eventData ? eventData.filter((item) => {
-            const itemDate = new Date(item.created_at);
-            return itemDate.toDateString() === selectedDate.toDateString();
+            const eventDate = new Date(item.created_at);
+            return eventDate.toDateString() === selectedDate.toDateString();
         }) : [];
 
         renderData(filteredData);
@@ -91,7 +91,7 @@ function handleSSEUpdates() {
             <td class="px-4 py-2" style="opacity: ${opacity}">${item.RequestType}</td>
             <td class="px-4 py-2" style="opacity: ${opacity}">${formattedDate}</td>
             <td class="px-4 py-2 text-center toggle-row" style="cursor:pointer;">
-                <i class="phone-icon fa-solid ${phoneIconClass}"></i>
+                <i class="fa-solid ${phoneIconClass}" id="toggle-notifs-phone-icon"></i>
             </td>
         </tr>`;
     }
@@ -107,7 +107,7 @@ function handleSSEUpdates() {
             td.style.opacity = opacityValue;
         }
 
-        const phoneIcon = row.querySelector(".phone-icon");
+        const phoneIcon = row.querySelector("#toggle-notifs-phone-icon");
         phoneIcon.classList.toggle("fa-phone", toggleStates[rowIndex]);
         phoneIcon.classList.toggle("fa-phone-slash", !toggleStates[rowIndex]);
     }
