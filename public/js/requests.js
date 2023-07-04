@@ -1,3 +1,5 @@
+let toggleStates = [];
+
 function handleDateFilter(renderTimeout, eventData, renderData) {
     const datePicker = document.getElementById("notifs-datepicker");
     clearTimeout(renderTimeout);
@@ -22,7 +24,11 @@ function handleRequestsUpdates() {
     const tbody = document.getElementById("notifs-tbody");
     const datePicker = document.getElementById("notifs-datepicker");
 
-    let toggleStates = [];
+    const storedToggleStates = localStorage.getItem('toggleStates');
+    if (storedToggleStates) {
+        toggleStates = JSON.parse(storedToggleStates);
+    }
+
     let previousCreatedAt = null;
     let renderTimeout = null;
     let eventData = [];
@@ -51,8 +57,11 @@ function handleRequestsUpdates() {
 
     window.renderData = function (eventData) {
         const maxRows = eventData.length;
-        const newToggleStates = new Array(eventData.length).fill(true);
-        toggleStates.push(...newToggleStates);
+        if (toggleStates.length === 0) {
+            const maxRows = eventData.length;
+            toggleStates = new Array(maxRows).fill(true);
+        }
+        toggleStates.push(...toggleStates);
 
         const rowsHtml = maxRows > 0
             ? eventData
@@ -73,6 +82,8 @@ function handleRequestsUpdates() {
             row.removeEventListener("click", handleToggleRowClick);
             row.addEventListener("click", () => handleToggleRowClick(index));
         });
+
+        localStorage.setItem('toggleStates', JSON.stringify(toggleStates));
     }
 
     function createRowHtml(item, index) {
@@ -100,13 +111,14 @@ function handleRequestsUpdates() {
             <td class="px-4 py-2" style="opacity: ${opacity}">${item.RequestType}</td>
             <td class="px-4 py-2" style="opacity: ${opacity}">${formattedDate}</td>
             <td class="px-4 py-2 text-center toggle-row" style="cursor:pointer;">
-                <i class="fa-solid ${phoneIconClass}" id="toggle-notifs-phone-icon"></i>
+                <i class="fa-solid ${phoneIconClass}" id="toggle-notifs-phone-icon" style="opacity: ${opacity}"></i>
             </td>
         </tr>`;
     }
 
     function handleToggleRowClick(rowIndex) {
         toggleStates[rowIndex] = !toggleStates[rowIndex];
+        console.log(toggleStates[rowIndex]);
 
         const row = tbody.querySelector(`tr:nth-child(${rowIndex + 1})`);
         const tds = row.getElementsByTagName("td");
@@ -119,6 +131,8 @@ function handleRequestsUpdates() {
         const phoneIcon = row.querySelector("#toggle-notifs-phone-icon");
         phoneIcon.classList.toggle("fa-phone", toggleStates[rowIndex]);
         phoneIcon.classList.toggle("fa-phone-slash", !toggleStates[rowIndex]);
+
+        localStorage.setItem('toggleStates', JSON.stringify(toggleStates));
     }
 
     let handleDateFilterListener = () => handleDateFilter(renderTimeout, eventData, window.renderData);
