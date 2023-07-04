@@ -2,45 +2,57 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\RequestNotifs;
-use Illuminate\Support\Facades\DB;
+use App\Models\OverallMoods;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Illuminate\Support\Facades\Log;
 
-class SSEController extends Controller{
-    private $notifs;
-    private $overall;
-
-    public function fetchData(){
-        $this->fetchDataFromDB();
-
-        return new StreamedResponse(function () {
+class SSEController extends Controller
+{
+    public function fetchData()
+    {
+        $response = new StreamedResponse(function () {
             $this->setSSEHeaders();
 
             while (true) {
-                $notifsData = json_encode($this->notifs);
+                $notifsData = $this->fetchNotifsFromDB();
+                $overallData = $this->fetchOverallFromDB();
 
-                echo "data: $notifsData\n\n";
-                $this->flushOutputBuffer();
+                $this->sendSSEMessage('notifs', $notifsData);
+                //$this->sendSSEMessage('overall', $overallData);
 
                 sleep(1);
             }
         });
+
+        return $response;
     }
 
-    private function fetchDataFromDB(){
-        $this->notifs = DB::table('requestNotifs')->orderBy('created_at', 'desc')->get();
-        $this->overall = DB::table('allMoods')->get();
+    private function fetchNotifsFromDB()
+    {
+        $notifs = RequestNotifs::orderBy('created_at', 'desc')->get();
+        return $notifs->toJson();
     }
 
-    private function setSSEHeaders(){
+    private function fetchOverallFromDB()
+    {
+        $overall = OverallMoods::all();
+        return $overall->toJson();
+    }
+
+    private function sendSSEMessage($event, $data)
+    {
+        echo "event: $event\n";
+        echo "data: $data\n\n";
+        
+        ob_flush();
+        flush();
+    }
+
+    private function setSSEHeaders()
+    {
         header('Content-Type: text/event-stream');
         header('Cache-Control: no-cache');
         header('Connection: keep-alive');
-    }
-
-    private function flushOutputBuffer(){
-        ob_flush();
-        flush();
     }
 }

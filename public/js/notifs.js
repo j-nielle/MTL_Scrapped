@@ -26,7 +26,7 @@ function handleSSEUpdates() {
     let previousCreatedAt = null;
     let renderTimeout = null;
     let eventData = [];
-
+    
     function handleSSEMessage(event) {
         eventData = JSON.parse(event.data);
 
@@ -48,7 +48,7 @@ function handleSSEUpdates() {
             window.renderData(eventData);
         }, 100);
     }
-
+    
     window.renderData = function (eventData) {
         const maxRows = eventData.length;
         const newToggleStates = new Array(eventData.length).fill(true);
@@ -117,7 +117,7 @@ function handleSSEUpdates() {
     }
 
     let handleDateFilterListener = () => handleDateFilter(renderTimeout, eventData, window.renderData);
-    eventSource.onmessage = handleSSEMessage;
+    eventSource.addEventListener('notifs', handleSSEMessage);
 
     datePicker.removeEventListener("change", handleDateFilterListener);
     datePicker.addEventListener("change", handleDateFilterListener);
