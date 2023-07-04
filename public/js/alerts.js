@@ -1,10 +1,10 @@
-function handleSSEUpdates() {
+function handleRequestsAlerts() {
     const eventSource = new EventSource("/sse-request");
     const flashMessage = document.getElementById("help-request-alert");
     let isVisible = false;
     let previousEventData = null;
 
-    function handleSSEMessage(event) {
+    function displayRequestAlert(event) {
         const eventData = JSON.parse(event.data);
 
         if (eventData.length === 0) {
@@ -36,7 +36,7 @@ function handleSSEUpdates() {
         previousEventData = eventData[0];
     }
 
-    eventSource.addEventListener("notifs", handleSSEMessage);
+    eventSource.addEventListener("notifs", displayRequestAlert);
 }
 
-document.addEventListener("DOMContentLoaded", handleSSEUpdates);
+document.addEventListener("DOMContentLoaded", handleRequestsAlerts);

@@ -17,7 +17,7 @@ function handleDateFilter(renderTimeout, eventData, renderData) {
     }, 100);
 }
 
-function handleSSEUpdates() {
+function handleRequestsUpdates() {
     const eventSource = new EventSource("/sse-request");
     const tbody = document.getElementById("notifs-tbody");
     const datePicker = document.getElementById("notifs-datepicker");
@@ -27,7 +27,7 @@ function handleSSEUpdates() {
     let renderTimeout = null;
     let eventData = [];
     
-    function handleSSEMessage(event) {
+    function updatedRequestsTable(event) {
         eventData = JSON.parse(event.data);
 
         if (eventData.length === 0) {
@@ -117,10 +117,10 @@ function handleSSEUpdates() {
     }
 
     let handleDateFilterListener = () => handleDateFilter(renderTimeout, eventData, window.renderData);
-    eventSource.addEventListener('notifs', handleSSEMessage);
+    eventSource.addEventListener('notifs', updatedRequestsTable);
 
     datePicker.removeEventListener("change", handleDateFilterListener);
     datePicker.addEventListener("change", handleDateFilterListener);
 }
 
-document.addEventListener("DOMContentLoaded", handleSSEUpdates);
+document.addEventListener("DOMContentLoaded", handleRequestsUpdates);
