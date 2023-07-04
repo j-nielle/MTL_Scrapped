@@ -26,7 +26,7 @@ function handleRequestsUpdates() {
     let previousCreatedAt = null;
     let renderTimeout = null;
     let eventData = [];
-    
+
     function updatedRequestsTable(event) {
         eventData = JSON.parse(event.data);
 
@@ -48,7 +48,7 @@ function handleRequestsUpdates() {
             window.renderData(eventData);
         }, 100);
     }
-    
+
     window.renderData = function (eventData) {
         const maxRows = eventData.length;
         const newToggleStates = new Array(eventData.length).fill(true);
@@ -60,11 +60,11 @@ function handleRequestsUpdates() {
                 .map((item, index) => createRowHtml(item, index))
                 .join("")
             : `<tr class="text-gray-900 border-b border-gray-300">
-            <td class="px-4 py-2">Empty</td>
-            <td class="px-4 py-2">Empty</td>
-            <td class="px-4 py-2">Empty</td>
-            <td class="px-4 py-2">Empty</td>
-            </tr>`;
+                <td class="px-4 py-2">Empty</td>
+                <td class="px-4 py-2">Empty</td>
+                <td class="px-4 py-2">Empty</td>
+                <td class="px-4 py-2">Empty</td>
+              </tr>`;
 
         tbody.innerHTML = rowsHtml;
 
@@ -76,16 +76,21 @@ function handleRequestsUpdates() {
     }
 
     function createRowHtml(item, index) {
-        const date = new Date(item.created_at);
-        const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1)
-            .toString()
-            .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")} ${date
-                .toLocaleString("en-US", {
-                    hour: "numeric",
-                    minute: "2-digit",
-                    hour12: true,
-                })
-                .toUpperCase()}`;
+        const currentDate = new Date(item.created_at);
+        const options = {
+            month: 'numeric',
+            day: 'numeric',
+            year: 'numeric',
+            timeZone: 'UTC',
+            timeZoneName: 'short',
+            hour12: true,
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric'
+        };
+
+        const utc8Date = new Date(currentDate.getTime());
+        const formattedDate = utc8Date.toLocaleString('en-US', options);
 
         const opacity = toggleStates[index] ? "1" : "0.5";
         const phoneIconClass = toggleStates[index] ? "fa-phone" : "fa-phone-slash";
@@ -123,4 +128,4 @@ function handleRequestsUpdates() {
     datePicker.addEventListener("change", handleDateFilterListener);
 }
 
-document.addEventListener("DOMContentLoaded", handleRequestsUpdates, {once: true});
+document.addEventListener("DOMContentLoaded", handleRequestsUpdates, { once: true });

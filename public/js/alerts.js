@@ -11,9 +11,7 @@ function handleRequestsAlerts() {
             return;
         }
 
-        // Assuming the 'created_at' property is a valid ISO8601 date string
         const latestCreatedAt = eventData[0].created_at;
-        const currentDateTime = new Date().toISOString();
 
         if (
             previousEventData &&
@@ -32,11 +30,10 @@ function handleRequestsAlerts() {
             }, 5000);
         }
 
-        // Store the latest eventData for future comparisons
         previousEventData = eventData[0];
     }
 
     requestSource.addEventListener("notifs", displayRequestAlert);
 }
 
-document.addEventListener("load", handleRequestsAlerts);
+document.addEventListener("DOMContentLoaded", handleRequestsAlerts, { once: true});

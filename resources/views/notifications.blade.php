@@ -1,8 +1,4 @@
 <x-app-layout>
-    @if(Route::is('notifications'))
-        <script src="{{ asset('js/requests.js') }}"></script>
-    @endif
-
     <div class="w-full p-7" id="notifs-container">
         <input type="date" id="notifs-datepicker" class="mb-2" value="{{ date('Y-m-d') }}"
             onchange="handleDateFilter()">
