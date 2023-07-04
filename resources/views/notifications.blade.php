@@ -1,6 +1,7 @@
 <x-app-layout>
-    <script src="{{ asset('js/notifs.js') }}"></script>
-
+    @if(Route::is('notifications'))
+        <script src="{{ asset('js/notifs.js') }}"></script>
+    @endif
     <div class="w-full p-8" id="notifs-container">
         <input type="date" id="notifs-datepicker" class="mb-2" value="{{ date('Y-m-d') }}" onchange="handleDateFilter()">
         <div class="overflow-auto max-h-96 w-fit drop-shadow-xl">
