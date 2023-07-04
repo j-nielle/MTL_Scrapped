@@ -7,7 +7,7 @@
 * Improved SSE performance  
 * Requests table date picker
 
- [July 3] Day 4  
+ [July 4] Day 4  
 
 * Fixed bugs  
 * Improved requests table  
