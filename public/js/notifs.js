@@ -10,7 +10,7 @@ function handleDateFilter(renderTimeout, eventData, renderData) {
             return eventDate.toDateString() === selectedDate.toDateString();
         }) : [];
 
-        renderData(filteredData);
+        window.renderData(filteredData);
     }, 100);
 }
 
@@ -42,11 +42,11 @@ function handleSSEUpdates() {
 
         clearTimeout(renderTimeout);
         renderTimeout = setTimeout(() => {
-            renderData(eventData);
+            window.renderData(eventData);
         }, 100);
     }
 
-    function renderData(eventData) {
+    window.renderData = function(eventData) {
         const maxRows = eventData.length;
         toggleStates = new Array(maxRows).fill(true);
 
@@ -112,7 +112,7 @@ function handleSSEUpdates() {
         phoneIcon.classList.toggle("fa-phone-slash", !toggleStates[rowIndex]);
     }
 
-    let handleDateFilterListener = () => handleDateFilter(renderTimeout, eventData, renderData);
+    let handleDateFilterListener = () => handleDateFilter(renderTimeout, eventData, window.renderData);
     eventSource.onmessage = handleSSEMessage;
 
     datePicker.removeEventListener("change", handleDateFilterListener);
