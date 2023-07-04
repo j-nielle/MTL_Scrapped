@@ -8,7 +8,7 @@ function handleDateFilter(renderTimeout, eventData, renderData) {
         const filteredData = eventData ? eventData.filter((item) => {
             const eventDate = new Date(item.created_at);
             if (selectedDate.toDateString() === 'Invalid Date') {
-                return true; // Return true to include all rows when selectedDate is Invalid Date
+                return true;
             }
             return eventDate.toDateString() === selectedDate.toDateString();
         }) : [];        
@@ -28,7 +28,7 @@ function handleSSEUpdates() {
     let eventData = [];
 
     function handleSSEMessage(event) {
-        eventData = JSON.parse(event.data); // Update the eventData
+        eventData = JSON.parse(event.data);
 
         if (eventData.length === 0) {
             return;
@@ -40,7 +40,7 @@ function handleSSEUpdates() {
             return;
         } else {
             previousCreatedAt = latestCreatedAt;
-            console.log("new");
+            console.log("new event received");
         }
 
         clearTimeout(renderTimeout);
@@ -69,7 +69,7 @@ function handleSSEUpdates() {
 
         const toggleRows = document.querySelectorAll(".toggle-row");
         toggleRows.forEach((row, index) => {
-            row.removeEventListener("click", handleToggleRowClick); // Remove the previous event listener
+            row.removeEventListener("click", handleToggleRowClick);
             row.addEventListener("click", () => handleToggleRowClick(index));
         });
     }
