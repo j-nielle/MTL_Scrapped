@@ -123,4 +123,4 @@ function handleRequestsUpdates() {
     datePicker.addEventListener("change", handleDateFilterListener);
 }
 
-document.addEventListener("DOMContentLoaded", handleRequestsUpdates);
+document.addEventListener("DOMContentLoaded", handleRequestsUpdates, {once: true});

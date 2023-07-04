@@ -3,8 +3,8 @@
         <script src="{{ asset('js/requests.js') }}"></script>
     @endif
 
-    <div class="w-full p-8" id="notifs-container">
-        <input type="date" id="notifs-datepicker" class="mb-2 mt-0" value="{{ date('Y-m-d') }}"
+    <div class="w-full p-7" id="notifs-container">
+        <input type="date" id="notifs-datepicker" class="mb-2" value="{{ date('Y-m-d') }}"
             onchange="handleDateFilter()">
         <div class="overflow-auto max-h-96 w-fit drop-shadow-xl">
             <table class="bg-white table-fixed sm:table-auto" id="notifs-table">

@@ -1,5 +1,5 @@
 function handleRequestsAlerts() {
-    const eventSource = new EventSource("/sse-request");
+    const requestSource = new EventSource("/sse-request");
     const flashMessage = document.getElementById("help-request-alert");
     let isVisible = false;
     let previousEventData = null;
@@ -36,7 +36,7 @@ function handleRequestsAlerts() {
         previousEventData = eventData[0];
     }
 
-    eventSource.addEventListener("notifs", displayRequestAlert);
+    requestSource.addEventListener("notifs", displayRequestAlert);
 }
 
-document.addEventListener("DOMContentLoaded", handleRequestsAlerts);
+document.addEventListener("load", handleRequestsAlerts);
