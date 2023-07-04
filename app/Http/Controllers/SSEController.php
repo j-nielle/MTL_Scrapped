@@ -28,6 +28,15 @@ class SSEController extends Controller
         return $response;
     }
 
+    private function sendSSEMessage($event, $data)
+    {
+        echo "event: $event\n";
+        echo "data: $data\n\n";
+        
+        ob_flush();
+        flush();
+    }
+
     private function fetchNotifsFromDB()
     {
         $notifs = RequestNotifs::orderBy('created_at', 'desc')->get();
@@ -40,19 +49,9 @@ class SSEController extends Controller
         return $overall->toJson();
     }
 
-    private function sendSSEMessage($event, $data)
-    {
-        echo "event: $event\n";
-        echo "data: $data\n\n";
-        
-        ob_flush();
-        flush();
-    }
-
     private function setSSEHeaders()
     {
         header('Content-Type: text/event-stream');
         header('Cache-Control: no-cache');
-        header('Connection: keep-alive');
     }
 }
