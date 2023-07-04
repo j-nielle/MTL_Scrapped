@@ -11,7 +11,7 @@ function handleDateFilter(renderTimeout, eventData, renderData) {
                 return true;
             }
             return eventDate.toDateString() === selectedDate.toDateString();
-        }) : [];        
+        }) : [];
 
         window.renderData(filteredData);
     }, 100);
@@ -49,9 +49,10 @@ function handleSSEUpdates() {
         }, 100);
     }
 
-    window.renderData = function(eventData) {
+    window.renderData = function (eventData) {
         const maxRows = eventData.length;
-        toggleStates = new Array(maxRows).fill(true);
+        const newToggleStates = new Array(eventData.length).fill(true);
+        toggleStates.push(...newToggleStates);
 
         const rowsHtml = maxRows > 0
             ? eventData
