@@ -1,11 +1,11 @@
 let toggleStates = [];
 
 function handleDateFilter(renderTimeout, eventData, renderData) {
-    const datePicker = document.getElementById("notifs-datepicker");
+    const requestDatePicker = document.getElementById("notifs-datepicker");
     clearTimeout(renderTimeout);
 
     renderTimeout = setTimeout(() => {
-        const selectedDate = new Date(datePicker.value);
+        const selectedDate = new Date(requestDatePicker.value);
 
         const filteredData = eventData ? eventData.filter((item) => {
             const eventDate = new Date(item.created_at);
@@ -22,7 +22,7 @@ function handleDateFilter(renderTimeout, eventData, renderData) {
 function handleRequestsUpdates() {
     const eventSource = new EventSource("/sse-request");
     const tbody = document.getElementById("notifs-tbody");
-    const datePicker = document.getElementById("notifs-datepicker");
+    const requestDatePicker = document.getElementById("notifs-datepicker");
 
     const storedToggleStates = localStorage.getItem('toggleStates');
     if (storedToggleStates) {
@@ -57,7 +57,7 @@ function handleRequestsUpdates() {
 
     window.renderData = function (eventData) {
         const maxRows = eventData.length;
-        
+
         if (toggleStates.length < maxRows) {
             const newToggleStates = new Array(maxRows - toggleStates.length).fill(true); // Create an array of true values
             toggleStates = newToggleStates.concat(toggleStates); // Add the new array to the beginning of the toggleStates array
@@ -88,7 +88,6 @@ function handleRequestsUpdates() {
 
     function createRowHtml(item, index) {
         const getItemDate = new Date(item.created_at);
-        const currDate = new Date();
 
         const options_one = {
             month: 'numeric',
@@ -100,15 +99,6 @@ function handleRequestsUpdates() {
             minute: 'numeric'
         };
 
-        const options_two = {
-            month: 'numeric',
-            day: 'numeric',
-            year: 'numeric',
-            hour: 'numeric',
-            minute: 'numeric'
-        };
-
-        const formattedCurrDate = new Date(currDate.getTime()).toLocaleString('en-US', options_two);
         const formattedItemDate = new Date(getItemDate.getTime()).toLocaleString('en-US', options_one);
 
         const opacity = toggleStates[index] ? "1" : "0.5";
@@ -144,10 +134,18 @@ function handleRequestsUpdates() {
     }
 
     let handleDateFilterListener = () => handleDateFilter(renderTimeout, eventData, window.renderData);
-    eventSource.addEventListener('notifs', updatedRequestsTable);
 
-    datePicker.removeEventListener("change", handleDateFilterListener);
-    datePicker.addEventListener("change", handleDateFilterListener);
+    try {
+        eventSource.addEventListener('notifs', updatedRequestsTable);
+    } catch (error) {
+        console.error(error);
+    }
+    
+    try {
+        requestDatePicker.removeEventListener("change", handleDateFilterListener);
+        requestDatePicker.addEventListener("change", handleDateFilterListener);
+    } catch (error) {
+        console.error(error);
+    }
 }
-
-document.addEventListener("DOMContentLoaded", handleRequestsUpdates, { once: true });
+document.addEventListener("DOMContentLoaded", handleRequestsUpdates);
