@@ -22,7 +22,7 @@ Route::get('/', function () {
 });
 
 Route::get('/sse-request-table', [SSEController::class, 'fetchData'])->middleware(['auth']);
-Route::get('/sse-request', [SSEController::class, 'fetchData'])->middleware(['auth']);
+Route::get('/sse-request-alert', [SSEController::class, 'fetchData'])->middleware(['auth']);
 
 Route::get('/notifications', [NotifController::class,'index'])->middleware(['auth', 'verified'])->name('notifications');
 

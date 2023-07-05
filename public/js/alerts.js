@@ -1,5 +1,5 @@
 function handleRequestsAlerts() {
-    const requestSource = new EventSource("/sse-request");
+    const requestSource = new EventSource("/sse-request-alert");
     const flashMessage = document.getElementById("help-request-alert");
     let isVisible = false;
     let previousEventData = null;

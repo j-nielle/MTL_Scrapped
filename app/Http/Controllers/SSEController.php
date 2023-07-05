@@ -16,12 +16,16 @@ class SSEController extends Controller
 
             while (true) {
                 $notifsData = $this->fetchNotifsFromDB();
-                $overallData = $this->fetchOverallFromDB();
 
-                //if(request()->is(''))
-                $this->sendSSEMessage('notifs', $notifsData);
-                //$this->sendSSEMessage('overall', $overallData);
-
+                if(request()->is('/sse-request-alert')){
+                    $createdAt = RequestNotifs::select('created_at')->get();
+                    $this->sendSSEMessage('createdAt', $createdAt);
+                    Log::info("createdAt: $createdAt");
+                }
+                if(request()->is('/sse-request-table')){
+                    $this->sendSSEMessage('notifs', $notifsData);
+                    Log::info('request is at /sse-request-table');
+                }
                 sleep(1);
             }
         });
@@ -33,7 +37,6 @@ class SSEController extends Controller
     {
         echo "event: $event\n";
         echo "data: $data\n\n";
-        Log::info("event: $event\n data: $data");
         ob_flush();
         flush();
     }
