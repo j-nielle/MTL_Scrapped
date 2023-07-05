@@ -1,5 +1,3 @@
-let toggleStates = [];
-
 function handleDateFilter(renderTimeout, eventData, renderData) {
     const datePicker = document.getElementById("notifs-datepicker");
     clearTimeout(renderTimeout);
@@ -23,11 +21,6 @@ function handleRequestsUpdates() {
     const eventSource = new EventSource("/sse-request");
     const tbody = document.getElementById("notifs-tbody");
     const datePicker = document.getElementById("notifs-datepicker");
-
-    const storedToggleStates = localStorage.getItem('toggleStates');
-    if (storedToggleStates) {
-        toggleStates = JSON.parse(storedToggleStates);
-    }
 
     let previousCreatedAt = null;
     let renderTimeout = null;
@@ -57,16 +50,11 @@ function handleRequestsUpdates() {
 
     window.renderData = function (eventData) {
         const maxRows = eventData.length;
-        if (toggleStates.length === 0) {
-            const maxRows = eventData.length;
-            toggleStates = new Array(maxRows).fill(true);
-        }
-        toggleStates.push(...toggleStates);
 
         const rowsHtml = maxRows > 0
             ? eventData
                 .slice(0, maxRows)
-                .map((item, index) => createRowHtml(item, index))
+                .map((item) => createRowHtml(item))
                 .join("")
             : `<tr class="text-gray-900 border-b border-gray-300">
                 <td class="px-4 py-2">Empty</td>
@@ -76,17 +64,9 @@ function handleRequestsUpdates() {
               </tr>`;
 
         tbody.innerHTML = rowsHtml;
-
-        const toggleRows = document.querySelectorAll(".toggle-row");
-        toggleRows.forEach((row, index) => {
-            row.removeEventListener("click", handleToggleRowClick);
-            row.addEventListener("click", () => handleToggleRowClick(index));
-        });
-
-        localStorage.setItem('toggleStates', JSON.stringify(toggleStates));
     }
 
-    function createRowHtml(item, index) {
+    function createRowHtml(item) {
         const currentDate = new Date(item.created_at);
         const options = {
             month: 'numeric',
@@ -103,36 +83,14 @@ function handleRequestsUpdates() {
         const utc8Date = new Date(currentDate.getTime());
         const formattedDate = utc8Date.toLocaleString('en-US', options);
 
-        const opacity = toggleStates[index] ? "1" : "0.5";
-        const phoneIconClass = toggleStates[index] ? "fa-phone" : "fa-phone-slash";
-
         return `<tr class="text-gray-900 border-b border-indigo-300">
-            <td class="px-4 py-2" style="opacity: ${opacity}">${item.Phone}</td>
-            <td class="px-4 py-2" style="opacity: ${opacity}">${item.RequestType}</td>
-            <td class="px-4 py-2" style="opacity: ${opacity}">${formattedDate}</td>
-            <td class="px-4 py-2 text-center toggle-row" style="cursor:pointer;">
-                <i class="fa-solid ${phoneIconClass}" id="toggle-notifs-phone-icon" style="opacity: ${opacity}"></i>
+            <td class="px-4 py-2">${item.Phone}</td>
+            <td class="px-4 py-2">${item.RequestType}</td>
+            <td class="px-4 py-2">${formattedDate}</td>
+            <td class="px-4 py-2 text-center">
+                <i class="fa-solid fa-trash" id="remove-request" style="cursor:pointer;" ></i>
             </td>
         </tr>`;
-    }
-
-    function handleToggleRowClick(rowIndex) {
-        toggleStates[rowIndex] = !toggleStates[rowIndex];
-        console.log(toggleStates[rowIndex]);
-
-        const row = tbody.querySelector(`tr:nth-child(${rowIndex + 1})`);
-        const tds = row.getElementsByTagName("td");
-
-        const opacityValue = toggleStates[rowIndex] ? "1" : "0.5";
-        for (const td of tds) {
-            td.style.opacity = opacityValue;
-        }
-
-        const phoneIcon = row.querySelector("#toggle-notifs-phone-icon");
-        phoneIcon.classList.toggle("fa-phone", toggleStates[rowIndex]);
-        phoneIcon.classList.toggle("fa-phone-slash", !toggleStates[rowIndex]);
-
-        localStorage.setItem('toggleStates', JSON.stringify(toggleStates));
     }
 
     let handleDateFilterListener = () => handleDateFilter(renderTimeout, eventData, window.renderData);
