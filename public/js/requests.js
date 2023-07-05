@@ -57,9 +57,10 @@ function handleRequestsUpdates() {
 
     window.renderData = function (eventData) {
         const maxRows = eventData.length;
-        if (toggleStates.length === 0) {
-            const maxRows = eventData.length;
-            toggleStates = new Array(maxRows).fill(true);
+        
+        if (toggleStates.length < maxRows) {
+            const newToggleStates = new Array(maxRows - toggleStates.length).fill(true); // Create an array of true values
+            toggleStates = newToggleStates.concat(toggleStates); // Add the new array to the beginning of the toggleStates array
         }
 
         const rowsHtml = maxRows > 0
@@ -88,7 +89,7 @@ function handleRequestsUpdates() {
     function createRowHtml(item, index) {
         const getItemDate = new Date(item.created_at);
         const currDate = new Date();
-        
+
         const options_one = {
             month: 'numeric',
             day: 'numeric',
@@ -107,7 +108,7 @@ function handleRequestsUpdates() {
             minute: 'numeric'
         };
 
-        const formattedCurrDate = new Date(currDate.getTime()).toLocaleString('en-US', options_two); 
+        const formattedCurrDate = new Date(currDate.getTime()).toLocaleString('en-US', options_two);
         const formattedItemDate = new Date(getItemDate.getTime()).toLocaleString('en-US', options_one);
 
         const opacity = toggleStates[index] ? "1" : "0.5";
