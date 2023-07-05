@@ -4,25 +4,15 @@ use App\Http\Controllers\NotifController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\SSEController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+use App\Http\Controllers\SSEController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/sse-request-table', [SSEController::class, 'fetchData'])->middleware(['auth']);
-Route::get('/sse-request-alert', [SSEController::class, 'fetchData'])->middleware(['auth']);
+//Route::get('/sse-request-table', [SSEController::class, 'fetchData'])->middleware(['auth'])->name('sse-request-table');
+Route::get('/sse-request-alert', [SSEController::class, 'fetchData'])->middleware(['auth'])->name('sse-request-alert');
 
 Route::get('/notifications', [NotifController::class,'index'])->middleware(['auth', 'verified'])->name('notifications');
 

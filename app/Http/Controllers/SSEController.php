@@ -31,7 +31,7 @@ class SSEController extends Controller
     {
         echo "event: $event\n";
         echo "data: $data\n\n";
-        //Log::info("SSE: $event - $data");
+        //Log::info("SSE: $data[0]");
         ob_flush();
         flush();
     }

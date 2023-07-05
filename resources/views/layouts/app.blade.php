@@ -33,6 +33,7 @@
 
         <!-- Page Content -->
         <main>
+            <script src="{{ asset('js/newRequest.js') }}"></script>
             <div class="hidden" id="help-request-alert">
                 <div
                     class="rounded-full p-2 m-4 bg-indigo-800 items-center text-indigo-100 leading-none fixed right-0 top-0 flex">

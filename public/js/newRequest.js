@@ -6,17 +6,24 @@ function handleRequestsAlerts() {
 
     function displayRequestAlert(event) {
         const eventData = JSON.parse(event.data);
+        const latestData = new Date(eventData[0].created_at);
 
+        const latestCreatedAt = latestData.toLocaleString('en-US', {
+            month: 'numeric',
+            day: 'numeric',
+            year: 'numeric',
+            hour: 'numeric',
+            timeZone: 'UTC',
+            minute: 'numeric',
+            second: 'numeric',
+            hour12: true
+        });
         if (eventData.length === 0) {
             return;
         }
+        const currentDate = new Date();
 
-        const latestCreatedAt = eventData[0].created_at;
-
-        if (
-            previousEventData &&
-            new Date(previousEventData.created_at) < new Date(latestCreatedAt)
-        ) {
+        if (latestCreatedAt === currentDate.toLocaleString()) {
             console.log("New data received");
 
             if (!isVisible) {
@@ -36,4 +43,4 @@ function handleRequestsAlerts() {
     requestSource.addEventListener("newRequest", displayRequestAlert);
 }
 
-document.addEventListener("DOMContentLoaded", handleRequestsAlerts, { once: true});
+document.addEventListener("DOMContentLoaded", handleRequestsAlerts, { once: true });
