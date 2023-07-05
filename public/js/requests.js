@@ -81,14 +81,15 @@ function handleRequestsUpdates() {
             row.removeEventListener("click", handleToggleRowClick);
             row.addEventListener("click", () => handleToggleRowClick(index));
         });
-        
+
         localStorage.setItem('toggleStates', JSON.stringify(toggleStates));
-        console.log(localStorage.getItem('toggleStates'))
     }
 
     function createRowHtml(item, index) {
-        const currentDate = new Date(item.created_at);
-        const options = {
+        const getItemDate = new Date(item.created_at);
+        const currDate = new Date();
+        
+        const options_one = {
             month: 'numeric',
             day: 'numeric',
             year: 'numeric',
@@ -98,8 +99,16 @@ function handleRequestsUpdates() {
             minute: 'numeric'
         };
 
-        const utc8Date = new Date(currentDate.getTime());
-        const formattedDate = utc8Date.toLocaleString('en-US', options);
+        const options_two = {
+            month: 'numeric',
+            day: 'numeric',
+            year: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric'
+        };
+
+        const formattedCurrDate = new Date(currDate.getTime()).toLocaleString('en-US', options_two); 
+        const formattedItemDate = new Date(getItemDate.getTime()).toLocaleString('en-US', options_one);
 
         const opacity = toggleStates[index] ? "1" : "0.5";
         const iconClass = toggleStates[index] ? "fa-phone" : "fa-check";
@@ -107,7 +116,7 @@ function handleRequestsUpdates() {
         return `<tr class="text-gray-900 border-b border-indigo-300">
             <td class="px-4 py-2" style="opacity: ${opacity}">${item.Phone}</td>
             <td class="px-4 py-2" style="opacity: ${opacity}">${item.RequestType}</td>
-            <td class="px-4 py-2" style="opacity: ${opacity}">${formattedDate}</td>
+            <td class="px-4 py-2" style="opacity: ${opacity}">${formattedItemDate}</td>
             <td class="px-4 py-2 text-center toggle-row" style="cursor:pointer;">
                 <i class="fa-solid ${iconClass}" id="toggle-notifs-phone-icon" style="color:green; opacity: ${opacity}"></i>
             </td>
@@ -116,7 +125,6 @@ function handleRequestsUpdates() {
 
     function handleToggleRowClick(rowIndex) {
         toggleStates[rowIndex] = !toggleStates[rowIndex];
-        console.log(toggleStates[rowIndex]);
 
         const row = tbody.querySelector(`tr:nth-child(${rowIndex + 1})`);
         const tds = row.getElementsByTagName("td");
