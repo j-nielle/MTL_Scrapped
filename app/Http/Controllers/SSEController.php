@@ -32,7 +32,7 @@ class SSEController extends Controller
     {
         echo "event: $event\n";
         echo "data: $data\n\n";
-        
+        Log::info("event: $event\n data: $data");
         ob_flush();
         flush();
     }
