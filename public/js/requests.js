@@ -102,14 +102,14 @@ function handleRequestsUpdates() {
         const formattedDate = utc8Date.toLocaleString('en-US', options);
 
         const opacity = toggleStates[index] ? "1" : "0.5";
-        const phoneIconClass = toggleStates[index] ? "fa-phone" : "fa-phone-slash";
+        const iconClass = toggleStates[index] ? "fa-phone" : "fa-check";
 
         return `<tr class="text-gray-900 border-b border-indigo-300">
             <td class="px-4 py-2" style="opacity: ${opacity}">${item.Phone}</td>
             <td class="px-4 py-2" style="opacity: ${opacity}">${item.RequestType}</td>
             <td class="px-4 py-2" style="opacity: ${opacity}">${formattedDate}</td>
             <td class="px-4 py-2 text-center toggle-row" style="cursor:pointer;">
-                <i class="fa-solid ${phoneIconClass}" id="toggle-notifs-phone-icon" style="opacity: ${opacity}"></i>
+                <i class="fa-solid ${iconClass}" id="toggle-notifs-phone-icon" style="color:green; opacity: ${opacity}"></i>
             </td>
         </tr>`;
     }
@@ -126,10 +126,10 @@ function handleRequestsUpdates() {
             td.style.opacity = opacityValue;
         }
 
-        const phoneIcon = row.querySelector("#toggle-notifs-phone-icon");
-        phoneIcon.style.opacity = opacityValue;
-        phoneIcon.classList.toggle("fa-phone", toggleStates[rowIndex]);
-        phoneIcon.classList.toggle("fa-phone-slash", !toggleStates[rowIndex]);
+        const rowIcon = row.querySelector("#toggle-notifs-phone-icon");
+        rowIcon.style.opacity = opacityValue;
+        rowIcon.classList.toggle("fa-phone", toggleStates[rowIndex]);
+        rowIcon.classList.toggle("fa-check", !toggleStates[rowIndex]);
 
         localStorage.setItem('toggleStates', JSON.stringify(toggleStates));
     }
