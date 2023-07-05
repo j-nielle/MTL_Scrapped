@@ -33,7 +33,7 @@ function handleRequestsAlerts() {
         previousEventData = eventData[0];
     }
 
-    requestSource.addEventListener("notifs", displayRequestAlert);
+    requestSource.addEventListener("newRequest", displayRequestAlert);
 }
 
 document.addEventListener("DOMContentLoaded", handleRequestsAlerts, { once: true});
