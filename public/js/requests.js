@@ -73,11 +73,9 @@ function handleRequestsUpdates() {
             day: 'numeric',
             year: 'numeric',
             timeZone: 'UTC',
-            timeZoneName: 'short',
             hour12: true,
             hour: 'numeric',
-            minute: 'numeric',
-            second: 'numeric'
+            minute: 'numeric'
         };
 
         const utc8Date = new Date(currentDate.getTime());
@@ -88,7 +86,7 @@ function handleRequestsUpdates() {
             <td class="px-4 py-2">${item.RequestType}</td>
             <td class="px-4 py-2">${formattedDate}</td>
             <td class="px-4 py-2 text-center">
-                <i class="fa-solid fa-trash" id="remove-request" style="cursor:pointer;" ></i>
+                <i class="fa-solid fa-trash" id="remove-request" style="color:red;cursor:pointer;" ></i>
             </td>
         </tr>`;
     }

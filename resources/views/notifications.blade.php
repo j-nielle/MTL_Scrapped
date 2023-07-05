@@ -5,12 +5,12 @@
         <div class="overflow-auto max-h-96 w-fit drop-shadow-xl">
             <table class="bg-white table-fixed sm:table-auto" id="notifs-table">
                 <thead
-                    class="sticky top-0 font-bold leading-6 tracking-widest text-left text-white bg-indigo-900 border-b border-indigo-200">
+                    class="sticky top-0 font-bold leading-6 tracking-wide text-left text-white bg-indigo-900 border-b border-indigo-200">
                     <tr>
-                        <th class="p-4">Contact Number</th>
+                        <th class="p-4">Contact #</th>
                         <th class="p-4">Request Type</th>
                         <th class="p-4">Request Created</th>
-                        <th class="p-4">Show/Hide</th>
+                        <th class="p-4">Remove</th>
                     </tr>
                 </thead>
                 <tbody id="notifs-tbody">
