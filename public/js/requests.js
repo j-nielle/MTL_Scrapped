@@ -1,3 +1,5 @@
+let toggleStates = [];
+
 function handleDateFilter(renderTimeout, eventData, renderData) {
     const datePicker = document.getElementById("notifs-datepicker");
     clearTimeout(renderTimeout);
@@ -23,7 +25,6 @@ function handleRequestsUpdates() {
     const datePicker = document.getElementById("notifs-datepicker");
 
     const storedToggleStates = localStorage.getItem('toggleStates');
-
     if (storedToggleStates) {
         toggleStates = JSON.parse(storedToggleStates);
     }
@@ -64,7 +65,7 @@ function handleRequestsUpdates() {
         const rowsHtml = maxRows > 0
             ? eventData
                 .slice(0, maxRows)
-                .map((item) => createRowHtml(item))
+                .map((item, index) => createRowHtml(item, index))
                 .join("")
             : `<tr class="text-gray-900 border-b border-gray-300">
                 <td class="px-4 py-2">Empty</td>
@@ -85,7 +86,7 @@ function handleRequestsUpdates() {
         console.log(localStorage.getItem('toggleStates'))
     }
 
-    function createRowHtml(item) {
+    function createRowHtml(item, index) {
         const currentDate = new Date(item.created_at);
         const options = {
             month: 'numeric',
@@ -100,12 +101,15 @@ function handleRequestsUpdates() {
         const utc8Date = new Date(currentDate.getTime());
         const formattedDate = utc8Date.toLocaleString('en-US', options);
 
+        const opacity = toggleStates[index] ? "1" : "0.5";
+        const phoneIconClass = toggleStates[index] ? "fa-phone" : "fa-phone-slash";
+
         return `<tr class="text-gray-900 border-b border-indigo-300">
-            <td class="px-4 py-2">${item.Phone}</td>
-            <td class="px-4 py-2">${item.RequestType}</td>
-            <td class="px-4 py-2">${formattedDate}</td>
-            <td class="px-4 py-2 text-center">
-                <i class="fa-solid fa-trash" id="remove-request" style="color:red;cursor:pointer;" ></i>
+            <td class="px-4 py-2" style="opacity: ${opacity}">${item.Phone}</td>
+            <td class="px-4 py-2" style="opacity: ${opacity}">${item.RequestType}</td>
+            <td class="px-4 py-2" style="opacity: ${opacity}">${formattedDate}</td>
+            <td class="px-4 py-2 text-center toggle-row" style="cursor:pointer;">
+                <i class="fa-solid ${phoneIconClass}" id="toggle-notifs-phone-icon" style="opacity: ${opacity}"></i>
             </td>
         </tr>`;
     }
