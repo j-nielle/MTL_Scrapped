@@ -16,6 +16,7 @@
         "vite": "^4.0.0"
     },
     "dependencies": {
-        "laravel-wave": "^0.7.1"
+        "laravel-wave": "^0.7.1",
+        "pako": "^2.1.0"
     }
 }
