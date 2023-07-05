@@ -43,4 +43,4 @@ function handleRequestsAlerts() {
     requestSource.addEventListener("newRequest", displayRequestAlert);
 }
 
-document.addEventListener("DOMContentLoaded", handleRequestsAlerts, { once: true });
+document.addEventListener("DOMContentLoaded", handleRequestsAlerts);
