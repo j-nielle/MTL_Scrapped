@@ -10,7 +10,7 @@
                         <th class="p-4">Contact #</th>
                         <th class="p-4">Request Type</th>
                         <th class="p-4">Request Created</th>
-                        <th class="p-4">Remove</th>
+                        <th class="p-4">Toggle</th>
                     </tr>
                 </thead>
                 <tbody id="notifs-tbody">
