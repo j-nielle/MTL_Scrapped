@@ -20,7 +20,7 @@ function handleDateFilter(renderTimeout, eventData, renderData) {
 }
 
 function handleRequestsUpdates() {
-    const eventSource = new EventSource("/sse-request");
+    const eventSource = new EventSource("/sse-request-table");
     const tbody = document.getElementById("notifs-tbody");
     const requestDatePicker = document.getElementById("notifs-datepicker");
 

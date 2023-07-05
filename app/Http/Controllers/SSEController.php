@@ -18,6 +18,7 @@ class SSEController extends Controller
                 $notifsData = $this->fetchNotifsFromDB();
                 $overallData = $this->fetchOverallFromDB();
 
+                //if(request()->is(''))
                 $this->sendSSEMessage('notifs', $notifsData);
                 //$this->sendSSEMessage('overall', $overallData);
 
