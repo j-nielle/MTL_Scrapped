@@ -25,6 +25,7 @@ function handleRequestsUpdates() {
     const datePicker = document.getElementById("notifs-datepicker");
 
     const storedToggleStates = localStorage.getItem('toggleStates');
+
     if (storedToggleStates) {
         toggleStates = JSON.parse(storedToggleStates);
     }
@@ -61,7 +62,6 @@ function handleRequestsUpdates() {
             const maxRows = eventData.length;
             toggleStates = new Array(maxRows).fill(true);
         }
-        toggleStates.push(...toggleStates);
 
         const rowsHtml = maxRows > 0
             ? eventData
@@ -82,8 +82,9 @@ function handleRequestsUpdates() {
             row.removeEventListener("click", handleToggleRowClick);
             row.addEventListener("click", () => handleToggleRowClick(index));
         });
-
+        
         localStorage.setItem('toggleStates', JSON.stringify(toggleStates));
+        console.log(localStorage.getItem('toggleStates'))
     }
 
     function createRowHtml(item, index) {
@@ -93,11 +94,9 @@ function handleRequestsUpdates() {
             day: 'numeric',
             year: 'numeric',
             timeZone: 'UTC',
-            timeZoneName: 'short',
             hour12: true,
             hour: 'numeric',
-            minute: 'numeric',
-            second: 'numeric'
+            minute: 'numeric'
         };
 
         const utc8Date = new Date(currentDate.getTime());
@@ -129,6 +128,7 @@ function handleRequestsUpdates() {
         }
 
         const phoneIcon = row.querySelector("#toggle-notifs-phone-icon");
+        phoneIcon.style.opacity = opacityValue;
         phoneIcon.classList.toggle("fa-phone", toggleStates[rowIndex]);
         phoneIcon.classList.toggle("fa-phone-slash", !toggleStates[rowIndex]);
 
