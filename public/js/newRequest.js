@@ -1,5 +1,5 @@
 function handleRequestsAlerts() {
-    const requestSource = new EventSource("/sse-request-alert");
+    const requestSource = new EventSource("/sse");
     const flashMessage = document.getElementById("help-request-alert");
     let isVisible = false;
     let previousEventData = null;
@@ -7,7 +7,11 @@ function handleRequestsAlerts() {
     function displayRequestAlert(event) {
         const eventData = JSON.parse(event.data);
         const latestData = new Date(eventData[0].created_at);
+        const currentDate = new Date();
 
+        if (eventData.length === 0 || eventData.length === 'undefined') {
+            return;
+        }
         const latestCreatedAt = latestData.toLocaleString('en-US', {
             month: 'numeric',
             day: 'numeric',
@@ -18,10 +22,6 @@ function handleRequestsAlerts() {
             second: 'numeric',
             hour12: true
         });
-        if (eventData.length === 0) {
-            return;
-        }
-        const currentDate = new Date();
 
         if (latestCreatedAt === currentDate.toLocaleString()) {
             console.log("New data received");

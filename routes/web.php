@@ -11,8 +11,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/sse-request-table', [SSEController::class, 'fetchData'])->middleware(['auth'])->name('sse-request-table');
-Route::get('/sse-request-alert', [SSEController::class, 'fetchData'])->middleware(['auth'])->name('sse-request-alert');
+Route::get('/sse', [SSEController::class, 'fetchData'])->middleware(['auth'])->name('sse');
 
 Route::get('/notifications', [NotifController::class,'index'])->middleware(['auth', 'verified'])->name('notifications');
 
